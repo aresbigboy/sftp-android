@@ -451,6 +451,14 @@ public class RsyncClientRunner {
      *  持锁后 CPU 与 WiFi 在息屏期间保持活跃，同步可正常跑完；任务结束/停止即释放，不影响日常省电。
      */
     private synchronized void acquireSyncLocks() {
+        // v1.0.25：启动前台服务通知——这是防止后台/锁屏后系统限制网络的关键。
+        // 仅靠 WakeLock+WifiLock 不够：Doze 模式下即使 CPU 醒着，蜂窝/WiFi 网络也会被暂停，
+        // 导致 TCP 连接 abort。前台服务让系统知道 App 在做用户可见的数据传输，不限制网络。
+        try {
+            RsyncClientService.start(ctx);
+        } catch (Throwable t) {
+            Log.e(TAG, "start rsync foreground service failed", t);
+        }
         try {
             if (wakeLock == null) {
                 PowerManager pm = (PowerManager) ctx.getApplicationContext()
@@ -499,6 +507,12 @@ public class RsyncClientRunner {
             }
         } catch (Throwable t) {
             Log.e(TAG, "release wifiLock failed", t);
+        }
+        // 停止前台服务通知
+        try {
+            RsyncClientService.stop(ctx);
+        } catch (Throwable t) {
+            Log.e(TAG, "stop rsync foreground service failed", t);
         }
     }
 

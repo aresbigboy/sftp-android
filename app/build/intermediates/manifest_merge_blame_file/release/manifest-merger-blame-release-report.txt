@@ -1,8 +1,8 @@
 1<?xml version="1.0" encoding="utf-8"?>
 2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
 3    package="com.example.lansftp"
-4    android:versionCode="25"
-5    android:versionName="1.0.24" >
+4    android:versionCode="26"
+5    android:versionName="1.0.25" >
 6
 7    <uses-sdk
 8        android:minSdkVersion="26"
@@ -54,7 +54,7 @@
 29-->[androidx.core:core:1.9.0] /home/user/.gradle/caches/transforms-3/6e1cadeb405580b47ec7e1dc9af54fc3/transformed/core-1.9.0/AndroidManifest.xml:26:22-94
 30
 31    <application
-31-->/home/user/Doubao/chats/38449509843207170/LanSftpServer/app/src/main/AndroidManifest.xml:15:5-40:19
+31-->/home/user/Doubao/chats/38449509843207170/LanSftpServer/app/src/main/AndroidManifest.xml:15:5-45:19
 32        android:name="com.example.lansftp.App"
 32-->/home/user/Doubao/chats/38449509843207170/LanSftpServer/app/src/main/AndroidManifest.xml:16:9-28
 33        android:allowBackup="true"
@@ -101,28 +101,36 @@
 54-->/home/user/Doubao/chats/38449509843207170/LanSftpServer/app/src/main/AndroidManifest.xml:38:13-37
 55            android:foregroundServiceType="dataSync" />
 55-->/home/user/Doubao/chats/38449509843207170/LanSftpServer/app/src/main/AndroidManifest.xml:39:13-53
-56
-57        <provider
-57-->[androidx.emoji2:emoji2:1.2.0] /home/user/.gradle/caches/transforms-3/033999059ea7ce45b81b7d1e7fc0551e/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:24:9-32:20
-58            android:name="androidx.startup.InitializationProvider"
-58-->[androidx.emoji2:emoji2:1.2.0] /home/user/.gradle/caches/transforms-3/033999059ea7ce45b81b7d1e7fc0551e/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:25:13-67
-59            android:authorities="com.example.lansftp.androidx-startup"
-59-->[androidx.emoji2:emoji2:1.2.0] /home/user/.gradle/caches/transforms-3/033999059ea7ce45b81b7d1e7fc0551e/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:26:13-68
-60            android:exported="false" >
-60-->[androidx.emoji2:emoji2:1.2.0] /home/user/.gradle/caches/transforms-3/033999059ea7ce45b81b7d1e7fc0551e/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:27:13-37
-61            <meta-data
-61-->[androidx.emoji2:emoji2:1.2.0] /home/user/.gradle/caches/transforms-3/033999059ea7ce45b81b7d1e7fc0551e/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:29:13-31:52
-62                android:name="androidx.emoji2.text.EmojiCompatInitializer"
-62-->[androidx.emoji2:emoji2:1.2.0] /home/user/.gradle/caches/transforms-3/033999059ea7ce45b81b7d1e7fc0551e/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:30:17-75
-63                android:value="androidx.startup" />
-63-->[androidx.emoji2:emoji2:1.2.0] /home/user/.gradle/caches/transforms-3/033999059ea7ce45b81b7d1e7fc0551e/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:31:17-49
-64            <meta-data
-64-->[androidx.lifecycle:lifecycle-process:2.4.1] /home/user/.gradle/caches/transforms-3/73bd95e778e11102c0ed700adeba10f5/transformed/jetified-lifecycle-process-2.4.1/AndroidManifest.xml:31:13-33:52
-65                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
-65-->[androidx.lifecycle:lifecycle-process:2.4.1] /home/user/.gradle/caches/transforms-3/73bd95e778e11102c0ed700adeba10f5/transformed/jetified-lifecycle-process-2.4.1/AndroidManifest.xml:32:17-78
-66                android:value="androidx.startup" />
-66-->[androidx.lifecycle:lifecycle-process:2.4.1] /home/user/.gradle/caches/transforms-3/73bd95e778e11102c0ed700adeba10f5/transformed/jetified-lifecycle-process-2.4.1/AndroidManifest.xml:33:17-49
-67        </provider>
-68    </application>
-69
-70</manifest>
+56        <service
+56-->/home/user/Doubao/chats/38449509843207170/LanSftpServer/app/src/main/AndroidManifest.xml:41:9-44:56
+57            android:name="com.example.lansftp.RsyncClientService"
+57-->/home/user/Doubao/chats/38449509843207170/LanSftpServer/app/src/main/AndroidManifest.xml:42:13-47
+58            android:exported="false"
+58-->/home/user/Doubao/chats/38449509843207170/LanSftpServer/app/src/main/AndroidManifest.xml:43:13-37
+59            android:foregroundServiceType="dataSync" />
+59-->/home/user/Doubao/chats/38449509843207170/LanSftpServer/app/src/main/AndroidManifest.xml:44:13-53
+60
+61        <provider
+61-->[androidx.emoji2:emoji2:1.2.0] /home/user/.gradle/caches/transforms-3/033999059ea7ce45b81b7d1e7fc0551e/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:24:9-32:20
+62            android:name="androidx.startup.InitializationProvider"
+62-->[androidx.emoji2:emoji2:1.2.0] /home/user/.gradle/caches/transforms-3/033999059ea7ce45b81b7d1e7fc0551e/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:25:13-67
+63            android:authorities="com.example.lansftp.androidx-startup"
+63-->[androidx.emoji2:emoji2:1.2.0] /home/user/.gradle/caches/transforms-3/033999059ea7ce45b81b7d1e7fc0551e/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:26:13-68
+64            android:exported="false" >
+64-->[androidx.emoji2:emoji2:1.2.0] /home/user/.gradle/caches/transforms-3/033999059ea7ce45b81b7d1e7fc0551e/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:27:13-37
+65            <meta-data
+65-->[androidx.emoji2:emoji2:1.2.0] /home/user/.gradle/caches/transforms-3/033999059ea7ce45b81b7d1e7fc0551e/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:29:13-31:52
+66                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+66-->[androidx.emoji2:emoji2:1.2.0] /home/user/.gradle/caches/transforms-3/033999059ea7ce45b81b7d1e7fc0551e/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:30:17-75
+67                android:value="androidx.startup" />
+67-->[androidx.emoji2:emoji2:1.2.0] /home/user/.gradle/caches/transforms-3/033999059ea7ce45b81b7d1e7fc0551e/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:31:17-49
+68            <meta-data
+68-->[androidx.lifecycle:lifecycle-process:2.4.1] /home/user/.gradle/caches/transforms-3/73bd95e778e11102c0ed700adeba10f5/transformed/jetified-lifecycle-process-2.4.1/AndroidManifest.xml:31:13-33:52
+69                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+69-->[androidx.lifecycle:lifecycle-process:2.4.1] /home/user/.gradle/caches/transforms-3/73bd95e778e11102c0ed700adeba10f5/transformed/jetified-lifecycle-process-2.4.1/AndroidManifest.xml:32:17-78
+70                android:value="androidx.startup" />
+70-->[androidx.lifecycle:lifecycle-process:2.4.1] /home/user/.gradle/caches/transforms-3/73bd95e778e11102c0ed700adeba10f5/transformed/jetified-lifecycle-process-2.4.1/AndroidManifest.xml:33:17-49
+71        </provider>
+72    </application>
+73
+74</manifest>
