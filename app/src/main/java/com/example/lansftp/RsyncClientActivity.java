@@ -250,7 +250,7 @@ public class RsyncClientActivity extends Activity {
         Settings s = Settings.load(this);
         String key = runner.getActiveKeyPath();
         String example = "rsync -avzP -e \"ssh -y -i " + key + " -p 22\" "
-                + s.username + "@192.168.1.100:/home/" + s.username + "/photos/ "
+                + "user@192.168.1.100:/home/user/photos/ "
                 + "/storage/emulated/0/Download/";
         etCommand.setText(example);
         toast("已填入示例，请修改远程主机 IP / 用户 / 路径");
