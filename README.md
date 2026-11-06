@@ -78,7 +78,7 @@ rsync -av -e "ssh -p 2222" admin@手机IP:/DCIM/ /本地/备份/
 1. 打开 App，点击「rsync 客户端」
 2. 输入 rsync 命令，例如：
    ```
-   rsync -avzP -e "ssh -p22013" liwei@120.133.65.136:~/游戏目录/ /sdcard/Download/PC/
+   rsync -avzP -e "ssh -p22" admin@远程IP:~/游戏目录/ /sdcard/Download/PC/
    ```
 3. 如需密码认证，在「远程密码」框输入（明文仅用于本次连接）
 4. 点击「运行」，输出框实时显示进度
