@@ -62,7 +62,7 @@ public class RsyncClientActivity extends Activity {
         Button btnResetKey = findViewById(R.id.btnResetKey);
         Button btnHistory = findViewById(R.id.btnHistory);
 
-        runner = new RsyncClientRunner(this);
+        runner = RsyncClientRunner.getInstance(this);
         prepare();
 
         btnRun.setOnClickListener(v -> runCommand());
@@ -286,8 +286,54 @@ public class RsyncClientActivity extends Activity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        // v1.0.26：重新绑定 listener，恢复输出历史和按钮状态
+        // 用户从 MainActivity 回来时，rsync 进程可能还在跑
+        runner.setListener(new RsyncClientRunner.OutputListener() {
+            @Override
+            public void onLine(String line) {
+                main.post(() -> appendOutput(line));
+            }
+
+            @Override
+            public void onExit(int exitCode, String summary) {
+                main.post(() -> {
+                    appendOutput("== " + summary + " ==");
+                    btnRun.setEnabled(true);
+                    btnStop.setEnabled(false);
+                    if (exitCode == 0) {
+                        runner.addHistory(etCommand.getText().toString().trim());
+                        etPassword.setText("");
+                    }
+                });
+            }
+        });
+        // 恢复输出历史
+        java.util.List<String> hist = runner.getOutputHistory();
+        if (!hist.isEmpty()) {
+            tvOutput.setText("");
+            for (String line : hist) {
+                appendOutput(line);
+            }
+        }
+        // 恢复按钮状态
+        boolean running = runner.isAlive();
+        btnRun.setEnabled(!running);
+        btnStop.setEnabled(running);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // v1.0.26：Activity 不可见时解绑 listener，但不杀进程
+        runner.setListener(null);
+    }
+
+    @Override
     protected void onDestroy() {
-        runner.stop();
+        // v1.0.26：不要调 runner.stop()——Activity 销毁后 rsync 进程继续在后台跑
+        // 用户从 MainActivity 回来时，onResume() 会重新绑定 listener 并恢复输出
         super.onDestroy();
     }
 }

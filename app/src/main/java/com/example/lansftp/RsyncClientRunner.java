@@ -35,6 +35,8 @@ public class RsyncClientRunner {
     public static final String PRIV_KEY = "id_ed25519";     // 内置密钥
     public static final String USER_KEY = "user_key";       // 导入密钥（dropbear 原生格式）
 
+    private static RsyncClientRunner sInstance;
+
     private final Context ctx;
     private final File keyDir;
     private Process process;
@@ -42,6 +44,12 @@ public class RsyncClientRunner {
     private PowerManager.WakeLock wakeLock;
     /** 同步期间持有的 WiFi 高性能锁（v1.0.20：防息屏 WiFi 省电断流） */
     private WifiManager.WifiLock wifiLock;
+    /** v1.0.26：输出历史缓存——Activity 重建时恢复显示 */
+    private final java.util.List<String> outputHistory =
+            java.util.Collections.synchronizedList(new java.util.ArrayList<>());
+    private static final int MAX_HISTORY_LINES = 200;
+    /** v1.0.26：当前绑定的 listener——Activity 销毁时置 null，重建时重新绑定 */
+    private OutputListener listener;
 
     public interface OutputListener {
         /** 追加一行输出（可能是 stdout 或 stderr） */
@@ -51,9 +59,33 @@ public class RsyncClientRunner {
         void onExit(int exitCode, String summary);
     }
 
-    public RsyncClientRunner(Context ctx) {
+    public static synchronized RsyncClientRunner getInstance(Context ctx) {
+        if (sInstance == null) {
+            sInstance = new RsyncClientRunner(ctx);
+        }
+        return sInstance;
+    }
+
+    private RsyncClientRunner(Context ctx) {
         this.ctx = ctx.getApplicationContext();
         this.keyDir = new File(ctx.getFilesDir(), KEY_DIR);
+    }
+
+    /** v1.0.26：Activity 重建时取回输出历史 */
+    public java.util.List<String> getOutputHistory() {
+        synchronized (outputHistory) {
+            return new ArrayList<>(outputHistory);
+        }
+    }
+
+    /** v1.0.26：Activity 重新绑定 listener（onResume 时调用） */
+    public void setListener(OutputListener l) {
+        this.listener = l;
+    }
+
+    /** v1.0.26：返回最近输出历史（用于恢复 UI） */
+    public boolean isAlive() {
+        return process != null && process.isAlive();
     }
 
     // ---------- 路径 ----------
@@ -201,6 +233,9 @@ public class RsyncClientRunner {
         if (process != null && process.isAlive()) {
             throw new IOException("已有任务在运行，请先停止");
         }
+        // v1.0.26：绑定 listener（Activity 销毁时置 null，重建时重新绑定）
+        this.listener = listener;
+        outputHistory.clear(); // 新任务开始，清空历史
         List<String> argv = ShellTokenizer.tokenize(commandLine);
         if (argv == null || argv.isEmpty()) {
             throw new IOException("命令为空或引号未闭合");
@@ -264,9 +299,25 @@ public class RsyncClientRunner {
                 int code = process.waitFor();
                 out.join(1000);
                 err.join(1000);
-                listener.onExit(code, code == 0 ? "完成（exit 0）" : "失败（exit " + code + "）");
+                String summary = code == 0 ? "完成（exit 0）" : "失败（exit " + code + "）";
+                // v1.0.26：同时写历史缓存
+                synchronized (outputHistory) {
+                    outputHistory.add("== " + summary + " ==");
+                }
+                // 只发给当前绑定的 listener（Activity 可见时）
+                OutputListener l = RsyncClientRunner.this.listener;
+                if (l != null) {
+                    l.onExit(code, summary);
+                }
             } catch (Exception e) {
-                listener.onExit(-1, e.toString());
+                String summary = e.toString();
+                synchronized (outputHistory) {
+                    outputHistory.add("== " + summary + " ==");
+                }
+                OutputListener l = RsyncClientRunner.this.listener;
+                if (l != null) {
+                    l.onExit(-1, summary);
+                }
             } finally {
                 process = null;
                 releaseSyncLocks();
@@ -526,7 +577,18 @@ public class RsyncClientRunner {
                     new InputStreamReader(src, StandardCharsets.UTF_8))) {
                 String line;
                 while ((line = r.readLine()) != null) {
-                    listener.onLine(line);
+                    // v1.0.26：同时写历史缓存（Activity 重建时恢复）
+                    synchronized (outputHistory) {
+                        outputHistory.add(line);
+                        while (outputHistory.size() > MAX_HISTORY_LINES) {
+                            outputHistory.remove(0);
+                        }
+                    }
+                    // 只发给当前绑定的 listener（Activity 可见时）；不可见时只写缓存
+                    OutputListener l = this.listener;
+                    if (l != null) {
+                        l.onLine(line);
+                    }
                 }
             } catch (IOException ignored) {
             }

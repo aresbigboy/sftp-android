@@ -125,14 +125,13 @@ gradle assembleRelease
 
 | 版本 | 主要变更 |
 |---|---|
+| v1.0.26 | 修复app中从rsync页面返回上一级导致 rsync 中断的问题 |
 | v1.0.25 | 修复后台 / 锁屏后 rsync 断连的问题 |
 | v1.0.24 | 修复域名解析错误 |
 | v1.0.23 | 修复一些显示错误 |
 | v1.0.22 | SFTP 服务端公网提速（4MB window + chacha20）；显示公网 IPv6 地址；长按复制地址 |
 | v1.0.21 | rsync 客户端提速：4MB 接收窗口 + chacha20（500KB/s → 10MB/s+） |
 | v1.0.20 | rsync 客户端后台/息屏保活（WakeLock + WifiLock） |
-| v1.0.19 | 回退输出滚动方案；移除超时看门狗；新增域名→IP 解析 |
-| v1.0.15 | 输出框自动滚动到最新 |
 | v1.0.13 | 修复 nativeLibraryDir exec；支持私钥导入 |
 | v1.0.12 | 新增 rsync 客户端命令窗口 |
 | v1.0.11 | 按需 WakeLock 省电改造 |
