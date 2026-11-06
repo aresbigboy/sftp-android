@@ -312,12 +312,30 @@ public class RsyncClientRunner {
             return token;
         }
         try {
-            java.net.InetAddress addr = java.net.InetAddress.getByName(host);
-            String ip = addr.getHostAddress();
-            Log.i(TAG, "resolve " + host + " -> " + ip);
-            return prefix + ip + rest.substring(colon);
+            java.net.InetAddress[] addrs = java.net.InetAddress.getAllByName(host);
+            String ip = null;
+            for (java.net.InetAddress a : addrs) {
+                if (a instanceof java.net.Inet4Address) {
+                    ip = a.getHostAddress();
+                    break;
+                }
+            }
+            if (ip == null && addrs.length > 0) {
+                ip = addrs[0].getHostAddress();
+            }
+            if (ip != null) {
+                Log.i(TAG, "resolve " + host + " -> " + ip);
+                return prefix + ip + rest.substring(colon);
+            }
+            // 解析到了地址但没有 IPv4——不要报错，fallback 保留原始域名
+            Log.w(TAG, "resolve " + host + ": no IPv4 address, fallback to original hostname");
+            return token;
         } catch (Exception e) {
-            throw new IOException("域名解析失败：" + host + "（" + e.getMessage() + "）");
+            // v1.0.24：不要直接报错退出——打印异常类型后 fallback 保留原始域名
+            // 万一 dbclient 自己能解析（某些网络环境下 musl 也能读 /etc/resolv.conf）
+            Log.w(TAG, "resolve " + host + " failed: " + e.getClass().getName() + ": " + e.getMessage()
+                    + ", fallback to original hostname");
+            return token;
         }
     }
 

@@ -219,31 +219,37 @@ public class RsyncClientActivity extends Activity {
         btnStop.setEnabled(true);
         String password = etPassword.getText().toString();
         appendOutput("$ " + cmd);
-        try {
-            runner.run(cmd, password, new RsyncClientRunner.OutputListener() {
-                @Override
-                public void onLine(String line) {
-                    main.post(() -> appendOutput(line));
-                }
+        // v1.0.24：runner.run() 里有 InetAddress.getByName()（域名解析），
+        // 必须在后台线程跑，否则 Android 主线程抛 NetworkOnMainThreadException（getMessage()=null）
+        new Thread(() -> {
+            try {
+                runner.run(cmd, password, new RsyncClientRunner.OutputListener() {
+                    @Override
+                    public void onLine(String line) {
+                        main.post(() -> appendOutput(line));
+                    }
 
-                @Override
-                public void onExit(int exitCode, String summary) {
-                    main.post(() -> {
-                        appendOutput("== " + summary + " ==");
-                        btnRun.setEnabled(true);
-                        btnStop.setEnabled(false);
-                        if (exitCode == 0) {
-                            runner.addHistory(cmd);
-                            etPassword.setText("");
-                        }
-                    });
-                }
-            });
-        } catch (IOException e) {
-            appendOutput("== 无法启动：" + e.getMessage() + " ==");
-            btnRun.setEnabled(true);
-            btnStop.setEnabled(false);
-        }
+                    @Override
+                    public void onExit(int exitCode, String summary) {
+                        main.post(() -> {
+                            appendOutput("== " + summary + " ==");
+                            btnRun.setEnabled(true);
+                            btnStop.setEnabled(false);
+                            if (exitCode == 0) {
+                                runner.addHistory(cmd);
+                                etPassword.setText("");
+                            }
+                        });
+                    }
+                });
+            } catch (IOException e) {
+                main.post(() -> {
+                    appendOutput("== 无法启动：" + e.getMessage() + " ==");
+                    btnRun.setEnabled(true);
+                    btnStop.setEnabled(false);
+                });
+            }
+        }, "rsync-run").start();
     }
 
     private void fillExample() {

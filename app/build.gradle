@@ -8,8 +8,8 @@ android {
         applicationId "com.example.lansftp"
         minSdk 26
         targetSdk 33
-        versionCode 24
-        versionName "1.0.23"
+        versionCode 25
+        versionName "1.0.24"
     }
 
     signingConfigs {
