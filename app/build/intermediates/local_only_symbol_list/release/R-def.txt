@@ -1,0 +1,34 @@
+R_DEF: Internal format may change without notice
+local
+color ic_launcher_background
+drawable ic_launcher_foreground
+drawable ic_stat_server
+id btnCopyKey
+id btnExample
+id btnHistory
+id btnImport
+id btnImportFile
+id btnResetKey
+id btnRsyncClient
+id btnRun
+id btnStop
+id btnToggle
+id etCommand
+id etImportKey
+id etKeys
+id etPass
+id etPassword
+id etPort
+id etRoot
+id etUser
+id tvKeyState
+id tvOutput
+id tvPubkey
+id tvStatus
+layout activity_main
+layout activity_rsync_client
+mipmap ic_launcher
+string app_name
+style Input
+style Label
+style Theme.LanSftp

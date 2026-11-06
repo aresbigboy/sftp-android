@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- 服务器机架：三条横档 + 运行指示灯 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M30,34 L78,34 L78,40 L30,40 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M30,51 L78,51 L78,57 L30,57 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M30,68 L78,68 L78,74 L30,74 Z" />
+    <path
+        android:fillColor="#69F0AE"
+        android:pathData="M36,42.5 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0" />
+    <path
+        android:fillColor="#40C4FF"
+        android:pathData="M36,59.5 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0" />
+</vector>

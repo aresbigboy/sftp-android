@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="局域网 SFTP 文件服务器"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:paddingBottom="4dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="其他设备可通过 SFTP 协议增删改查本机共享目录中的文件"
+            android:textSize="13sp"
+            android:textColor="#666666"
+            android:paddingBottom="16dp" />
+
+        <TextView style="@style/Label" android:text="用户名" />
+        <EditText
+            android:id="@+id/etUser"
+            style="@style/Input"
+            android:hint="例如 admin"
+            android:inputType="text" />
+
+        <TextView style="@style/Label" android:text="密码（至少 6 位）" />
+        <EditText
+            android:id="@+id/etPass"
+            style="@style/Input"
+            android:hint="建议设置强密码"
+            android:inputType="textPassword" />
+
+        <TextView style="@style/Label" android:text="端口" />
+        <EditText
+            android:id="@+id/etPort"
+            style="@style/Input"
+            android:hint="默认 2222"
+            android:inputType="number" />
+
+        <TextView style="@style/Label" android:text="共享根目录" />
+        <EditText
+            android:id="@+id/etRoot"
+            style="@style/Input"
+            android:hint="例如 /storage/emulated/0"
+            android:inputType="text" />
+
+        <TextView style="@style/Label" android:text="客户端公钥（可选，用于免密登录）" />
+        <EditText
+            android:id="@+id/etKeys"
+            style="@style/Input"
+            android:hint="每行一个公钥，例如 ssh-ed25519 AAAA... 或 ssh-rsa AAAA...\n在客户端生成密钥后把公钥粘贴到这里即可免密"
+            android:inputType="textMultiLine"
+            android:minLines="3"
+            android:gravity="top|start" />
+
+        <Button
+            android:id="@+id/btnToggle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="启动服务器" />
+
+        <Button
+            android:id="@+id/btnRsyncClient"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="rsync 客户端（远程 → 本机）" />
+
+        <TextView
+            android:id="@+id/tvStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="○ 已停止"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:textIsSelectable="true" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="使用说明：\n1. 手机与电脑连接同一 WiFi / 局域网\n2. 启动服务器，记下屏幕上的连接地址\n3. 电脑使用任意 SFTP 客户端连接，如 FileZilla、WinSCP、终端 sftp 命令：\n   sftp 用户名@手机IP -P 端口\n4. 连接后可上传、下载、删除、重命名、新建文件夹\n\n安全提示：请务必修改默认密码；仅建议在可信局域网内使用，不要将端口暴露到公网。"
+            android:textSize="13sp"
+            android:textColor="#444444"
+            android:lineSpacingExtra="3dp" />
+    </LinearLayout>
+</ScrollView>

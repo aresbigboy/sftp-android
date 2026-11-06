@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="rsync 客户端（远程 → 本机）"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:paddingBottom="4dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="输入 rsync 命令，App 将作为 rsync 客户端从远程同步文件到本机。远程电脑需开启 sshd 并安装 rsync，且允许下方公钥免密登录。"
+            android:textSize="13sp"
+            android:textColor="#666666"
+            android:paddingBottom="12dp" />
+
+        <TextView style="@style/Label" android:text="本机公钥（添加到远程电脑 ~/.ssh/authorized_keys 后免密）" />
+        <TextView
+            android:id="@+id/tvPubkey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:typeface="monospace"
+            android:textIsSelectable="true"
+            android:background="#F0F0F0"
+            android:padding="8dp"
+            android:minLines="2"
+            android:text="（首次进入自动生成密钥，请稍候…）" />
+
+        <Button
+            android:id="@+id/btnCopyKey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="复制公钥" />
+
+        <TextView
+            android:id="@+id/tvKeyState"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textColor="#666666"
+            android:layout_marginTop="4dp"
+            android:text="密钥状态：…" />
+
+        <TextView style="@style/Label" android:text="导入自己的私钥（可选，支持 RSA / ed25519，无口令）" />
+        <EditText
+            android:id="@+id/etImportKey"
+            style="@style/Input"
+            android:inputType="textMultiLine"
+            android:minLines="4"
+            android:gravity="top|start"
+            android:typeface="monospace"
+            android:textSize="12sp"
+            android:hint="粘贴私钥全文（-----BEGIN OPENSSH PRIVATE KEY----- … -----END…）\n或点击“选择文件”读取 id_rsa / id_ed25519" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="4dp">
+
+            <Button
+                android:id="@+id/btnImport"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="导入私钥" />
+
+            <Button
+                android:id="@+id/btnImportFile"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="选择文件…" />
+
+            <Button
+                android:id="@+id/btnResetKey"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="恢复内置密钥" />
+        </LinearLayout>
+
+        <TextView style="@style/Label" android:text="rsync 命令" />
+        <EditText
+            android:id="@+id/etCommand"
+            style="@style/Input"
+            android:inputType="textMultiLine"
+            android:minLines="4"
+            android:gravity="top|start"
+            android:typeface="monospace"
+            android:textSize="12sp"
+            android:hint="例如：rsync -avzP -e &quot;ssh -y -i &lt;私钥路径&gt; -p 22&quot; user@192.168.1.100:/home/user/photos/ /storage/emulated/0/Download/" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="4dp">
+
+            <EditText
+                android:id="@+id/etPassword"
+                style="@style/Input"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:inputType="textPassword"
+                android:singleLine="true"
+                android:hint="远程密码（可选，免密配置好后可留空）" />
+
+            <Button
+                android:id="@+id/btnHistory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="历史" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+
+            <Button
+                android:id="@+id/btnRun"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="运行" />
+
+            <Button
+                android:id="@+id/btnStop"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="停止" />
+
+            <Button
+                android:id="@+id/btnExample"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="示例命令" />
+        </LinearLayout>
+
+        <TextView style="@style/Label" android:text="输出（固定高度，自动滚动到最新）" />
+        <TextView
+            android:id="@+id/tvOutput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxHeight="240dp"
+            android:scrollbars="vertical"
+            android:textSize="12sp"
+            android:typeface="monospace"
+            android:background="#1A1A1A"
+            android:textColor="#00E676"
+            android:padding="8dp"
+            android:minLines="8"
+            android:textIsSelectable="true"
+            android:text="" />
+
+        <TextView style="@style/Label" android:text="使用说明" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:textColor="#444444"
+            android:lineSpacingExtra="3dp"
+            android:text="1. 本 App 内置 rsync 与 ssh(dropbear)，无需在手机上安装任何东西。\n2. 首次进入自动生成 ed25519 密钥对（私钥仅存 App 私有目录）。\n3. 点击“复制公钥”，把公钥添加到远程电脑的 ~/.ssh/authorized_keys（没有就新建，权限 600）。\n4. 也可以用你自己的私钥：粘贴私钥全文或选择文件导入（支持 RSA / ed25519，需无口令；带口令请先在电脑上执行 ssh-keygen -p 移除）。\n5. 免密未配置好时，可在“远程密码”框输入密码运行（明文仅用于本次连接）。\n6. 命令会自动补全 ssh 路径 / -y / -i，点“历史”可复用最近 10 条命令。\n7. 点击“示例命令”生成模板，改远程主机/用户名/路径后运行。\n8. 远程路径尾带 / 表示同步目录内容，不带 / 表示同步目录本身（与 rsync 语义一致）。\n9. 安全提示：命令在本机以当前用户权限执行，请勿运行不信任的命令。" />
+    </LinearLayout>
+</ScrollView>
