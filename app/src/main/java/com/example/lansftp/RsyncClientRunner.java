@@ -50,6 +50,8 @@ public class RsyncClientRunner {
     private static final int MAX_HISTORY_LINES = 200;
     /** v1.0.26：当前绑定的 listener——Activity 销毁时置 null，重建时重新绑定 */
     private OutputListener listener;
+    /** v1.0.27：当前执行的命令——waiter 线程结束时记录历史用 */
+    private String currentCommand;
 
     public interface OutputListener {
         /** 追加一行输出（可能是 stdout 或 stderr） */
@@ -235,6 +237,7 @@ public class RsyncClientRunner {
         }
         // v1.0.26：绑定 listener（Activity 销毁时置 null，重建时重新绑定）
         this.listener = listener;
+        this.currentCommand = commandLine;
         outputHistory.clear(); // 新任务开始，清空历史
         List<String> argv = ShellTokenizer.tokenize(commandLine);
         if (argv == null || argv.isEmpty()) {
@@ -304,6 +307,10 @@ public class RsyncClientRunner {
                 synchronized (outputHistory) {
                     outputHistory.add("== " + summary + " ==");
                 }
+                // v1.0.27：不管成功失败都记录历史命令（方便用户下次直接复用）
+                if (currentCommand != null && !currentCommand.trim().isEmpty()) {
+                    addHistory(currentCommand.trim());
+                }
                 // 只发给当前绑定的 listener（Activity 可见时）
                 OutputListener l = RsyncClientRunner.this.listener;
                 if (l != null) {
@@ -314,12 +321,17 @@ public class RsyncClientRunner {
                 synchronized (outputHistory) {
                     outputHistory.add("== " + summary + " ==");
                 }
+                // v1.0.27：异常退出也记录历史
+                if (currentCommand != null && !currentCommand.trim().isEmpty()) {
+                    addHistory(currentCommand.trim());
+                }
                 OutputListener l = RsyncClientRunner.this.listener;
                 if (l != null) {
                     l.onExit(-1, summary);
                 }
             } finally {
                 process = null;
+                currentCommand = null;
                 releaseSyncLocks();
             }
         }, "rsync-client-waiter");

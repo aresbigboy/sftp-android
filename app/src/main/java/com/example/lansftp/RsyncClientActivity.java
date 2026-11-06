@@ -236,7 +236,6 @@ public class RsyncClientActivity extends Activity {
                             btnRun.setEnabled(true);
                             btnStop.setEnabled(false);
                             if (exitCode == 0) {
-                                runner.addHistory(cmd);
                                 etPassword.setText("");
                             }
                         });
@@ -303,7 +302,6 @@ public class RsyncClientActivity extends Activity {
                     btnRun.setEnabled(true);
                     btnStop.setEnabled(false);
                     if (exitCode == 0) {
-                        runner.addHistory(etCommand.getText().toString().trim());
                         etPassword.setText("");
                     }
                 });
