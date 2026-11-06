@@ -125,6 +125,7 @@ gradle assembleRelease
 
 | 版本 | 主要变更 |
 |---|---|
+| v1.0.23 | 修复一些显示错误 |
 | v1.0.22 | SFTP 服务端公网提速（4MB window + chacha20）；显示公网 IPv6 地址；长按复制地址 |
 | v1.0.21 | rsync 客户端提速：4MB 接收窗口 + chacha20（500KB/s → 10MB/s+） |
 | v1.0.20 | rsync 客户端后台/息屏保活（WakeLock + WifiLock） |
