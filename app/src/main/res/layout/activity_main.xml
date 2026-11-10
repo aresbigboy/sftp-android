@@ -54,15 +54,6 @@
             android:hint="例如 /storage/emulated/0"
             android:inputType="text" />
 
-        <TextView style="@style/Label" android:text="客户端公钥（可选，用于免密登录）" />
-        <EditText
-            android:id="@+id/etKeys"
-            style="@style/Input"
-            android:hint="每行一个公钥，例如 ssh-ed25519 AAAA... 或 ssh-rsa AAAA...\n在客户端生成密钥后把公钥粘贴到这里即可免密"
-            android:inputType="textMultiLine"
-            android:minLines="3"
-            android:gravity="top|start" />
-
         <Button
             android:id="@+id/btnToggle"
             android:layout_width="match_parent"
@@ -86,6 +77,17 @@
             android:textSize="15sp"
             android:textStyle="bold"
             android:textIsSelectable="true" />
+
+        <TextView style="@style/Label"
+            android:layout_marginTop="20dp"
+            android:text="客户端公钥（可选，用于免密登录）" />
+        <EditText
+            android:id="@+id/etKeys"
+            style="@style/Input"
+            android:hint="每行一个公钥，例如 ssh-ed25519 AAAA... 或 ssh-rsa AAAA...\n在客户端生成密钥后把公钥粘贴到这里即可免密"
+            android:inputType="textMultiLine"
+            android:minLines="3"
+            android:gravity="top|start" />
 
         <TextView
             android:layout_width="match_parent"

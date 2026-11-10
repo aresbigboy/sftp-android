@@ -21,78 +21,10 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="输入 rsync 命令，App 将作为 rsync 客户端从远程同步文件到本机。远程电脑需开启 sshd 并安装 rsync，且允许下方公钥免密登录。"
+            android:text="输入 rsync 命令，App 将作为 rsync 客户端从远程同步文件到本机。远程电脑需开启 sshd 并安装 rsync，且允许本机公钥免密登录（公钥见页面底部）。"
             android:textSize="13sp"
             android:textColor="#666666"
             android:paddingBottom="12dp" />
-
-        <TextView style="@style/Label" android:text="本机公钥（添加到远程电脑 ~/.ssh/authorized_keys 后免密）" />
-        <TextView
-            android:id="@+id/tvPubkey"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:typeface="monospace"
-            android:textIsSelectable="true"
-            android:background="#F0F0F0"
-            android:padding="8dp"
-            android:minLines="2"
-            android:text="（首次进入自动生成密钥，请稍候…）" />
-
-        <Button
-            android:id="@+id/btnCopyKey"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:text="复制公钥" />
-
-        <TextView
-            android:id="@+id/tvKeyState"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:textColor="#666666"
-            android:layout_marginTop="4dp"
-            android:text="密钥状态：…" />
-
-        <TextView style="@style/Label" android:text="导入自己的私钥（可选，支持 RSA / ed25519，无口令）" />
-        <EditText
-            android:id="@+id/etImportKey"
-            style="@style/Input"
-            android:inputType="textMultiLine"
-            android:minLines="4"
-            android:gravity="top|start"
-            android:typeface="monospace"
-            android:textSize="12sp"
-            android:hint="粘贴私钥全文（-----BEGIN OPENSSH PRIVATE KEY----- … -----END…）\n或点击“选择文件”读取 id_rsa / id_ed25519" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="4dp">
-
-            <Button
-                android:id="@+id/btnImport"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="导入私钥" />
-
-            <Button
-                android:id="@+id/btnImportFile"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="选择文件…" />
-
-            <Button
-                android:id="@+id/btnResetKey"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="恢复内置密钥" />
-        </LinearLayout>
 
         <TextView style="@style/Label" android:text="rsync 命令" />
         <EditText
@@ -171,6 +103,76 @@
             android:minLines="8"
             android:textIsSelectable="true"
             android:text="" />
+
+        <TextView style="@style/Label"
+            android:layout_marginTop="20dp"
+            android:text="本机公钥（添加到远程电脑 ~/.ssh/authorized_keys 后免密）" />
+        <TextView
+            android:id="@+id/tvPubkey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:typeface="monospace"
+            android:textIsSelectable="true"
+            android:background="#F0F0F0"
+            android:padding="8dp"
+            android:minLines="2"
+            android:text="（首次进入自动生成密钥，请稍候…）" />
+
+        <Button
+            android:id="@+id/btnCopyKey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="复制公钥" />
+
+        <TextView
+            android:id="@+id/tvKeyState"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textColor="#666666"
+            android:layout_marginTop="4dp"
+            android:text="密钥状态：…" />
+
+        <TextView style="@style/Label" android:text="导入自己的私钥（可选，支持 RSA / ed25519，无口令）" />
+        <EditText
+            android:id="@+id/etImportKey"
+            style="@style/Input"
+            android:inputType="textMultiLine"
+            android:minLines="4"
+            android:gravity="top|start"
+            android:typeface="monospace"
+            android:textSize="12sp"
+            android:hint="粘贴私钥全文（-----BEGIN OPENSSH PRIVATE KEY----- … -----END…）\n或点击“选择文件”读取 id_rsa / id_ed25519" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="4dp">
+
+            <Button
+                android:id="@+id/btnImport"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="导入私钥" />
+
+            <Button
+                android:id="@+id/btnImportFile"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="选择文件…" />
+
+            <Button
+                android:id="@+id/btnResetKey"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="恢复内置密钥" />
+        </LinearLayout>
 
         <TextView style="@style/Label" android:text="使用说明" />
         <TextView

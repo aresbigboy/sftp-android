@@ -16,6 +16,10 @@
         "source": "/home/user/.gradle/daemon/7.6.4/com.example.lansftp.app-main-22:/drawable/ic_stat_server.xml"
     },
     {
+        "merged": "com.example.lansftp.app-merged_res-21:/layout_activity_rsync_client.xml.flat",
+        "source": "com.example.lansftp.app-main-22:/layout/activity_rsync_client.xml"
+    },
+    {
         "merged": "com.example.lansftp.app-merged_res-21:/layout_activity_main.xml.flat",
         "source": "com.example.lansftp.app-main-22:/layout/activity_main.xml"
     },
