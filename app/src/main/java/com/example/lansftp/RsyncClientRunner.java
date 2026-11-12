@@ -267,13 +267,20 @@ public class RsyncClientRunner {
             argv.add(2, nativeLibDir() + "/libssh.so");
         }
 
-        // ---- 远程主机参数：域名 → IP（v1.0.19）----
+        // ---- 远程主机参数：域名 → IP（v1.0.19，v1.0.29 支持带空格路径）----
         // 静态 musl 二进制（dbclient）不走 Android 系统 DNS，解析域名会失败；
         // 由 App 端（Java，走系统解析器）把 user@host:path / host:path 中的域名换成 IP。
+        // 路径本身含空格时 rsync 会把它作为单个参数传下去，这里同样支持。
         for (int i = 1; i < argv.size(); i++) {
             String tok = argv.get(i);
-            if (isRemotePathToken(tok)) {
-                argv.set(i, resolveRemoteHost(tok));
+            if (RemotePathTokens.isRemotePathToken(tok)) {
+                RemotePathTokens.Result r = RemotePathTokens.resolve(tok);
+                if (r.changed) {
+                    Log.i(TAG, "resolve " + r.host + " -> " + r.ip);
+                } else if (r.host != null) {
+                    Log.w(TAG, "resolve " + r.host + " failed/unchanged, keep original hostname");
+                }
+                argv.set(i, r.token);
             }
         }
 
@@ -338,68 +345,14 @@ public class RsyncClientRunner {
         waiter.start();
     }
 
-    /** 判定是否为远程主机路径参数：含 ':'，且不含空格，且要么含 '@' 要么首个 ':' 之前不含 '/' */
+    /** 判定是否为远程主机路径参数（委托给纯 JDK 实现，便于单测） */
     static boolean isRemotePathToken(String tok) {
-        if (tok == null || tok.isEmpty() || tok.indexOf(' ') >= 0) {
-            return false;
-        }
-        if (tok.indexOf(':') < 0) {
-            return false;
-        }
-        if (tok.indexOf('@') >= 0) {
-            return true;
-        }
-        int colon = tok.indexOf(':');
-        return colon >= 0 && tok.substring(0, colon).indexOf('/') < 0;
+        return RemotePathTokens.isRemotePathToken(tok);
     }
 
-    /** 把 user@host:path / host:path 中的域名解析为 IP（已解析过的或 IP 字面量则原样返回） */
+    /** 把 user@host:path / host:path 中的域名解析为 IP（委托给纯 JDK 实现） */
     static String resolveRemoteHost(String token) throws IOException {
-        String rest = token;
-        String prefix = "";
-        int at = token.lastIndexOf('@');
-        if (at >= 0) {
-            prefix = token.substring(0, at + 1);
-            rest = token.substring(at + 1);
-        }
-        int colon = rest.indexOf(':');
-        if (colon < 0) {
-            return token; // 不是远程路径，不动
-        }
-        String host = rest.substring(0, colon);
-        if (host.isEmpty() || host.startsWith("[")) {
-            return token; // 空 host 或 IPv6 字面量，不动
-        }
-        if (host.matches("[0-9.]+") || host.equalsIgnoreCase("localhost")) {
-            // IPv4 字面量 / localhost 无需处理
-            return token;
-        }
-        try {
-            java.net.InetAddress[] addrs = java.net.InetAddress.getAllByName(host);
-            String ip = null;
-            for (java.net.InetAddress a : addrs) {
-                if (a instanceof java.net.Inet4Address) {
-                    ip = a.getHostAddress();
-                    break;
-                }
-            }
-            if (ip == null && addrs.length > 0) {
-                ip = addrs[0].getHostAddress();
-            }
-            if (ip != null) {
-                Log.i(TAG, "resolve " + host + " -> " + ip);
-                return prefix + ip + rest.substring(colon);
-            }
-            // 解析到了地址但没有 IPv4——不要报错，fallback 保留原始域名
-            Log.w(TAG, "resolve " + host + ": no IPv4 address, fallback to original hostname");
-            return token;
-        } catch (Exception e) {
-            // v1.0.24：不要直接报错退出——打印异常类型后 fallback 保留原始域名
-            // 万一 dbclient 自己能解析（某些网络环境下 musl 也能读 /etc/resolv.conf）
-            Log.w(TAG, "resolve " + host + " failed: " + e.getClass().getName() + ": " + e.getMessage()
-                    + ", fallback to original hostname");
-            return token;
-        }
+        return RemotePathTokens.resolve(token).token;
     }
 
     /** 重写 rsh 字符串：ssh → nativeLibraryDir/libssh.so 绝对路径，并自动补 -y / -i / -W / -c */
